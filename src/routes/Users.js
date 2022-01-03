@@ -84,7 +84,7 @@ router.get(
       cookies: req.session,
       data: data,
     });
-    res.redirect("http://localhost:3000/login");
+    res.redirect("https://servio-api-2.herokuapp.com//login");
   }
 );
 
@@ -103,7 +103,7 @@ router.get(
       cookies: req.session,
       data: userResult,
     });
-    res.redirect("http://localhost:3000/login");
+    res.redirect("https://servio-api-2.herokuapp.com//login");
   }
   // userFunctions.githubAuth
 );
@@ -130,7 +130,7 @@ router.get(
         cookies: req.session,
         data: userResult,
       });
-      res.redirect("http://localhost:3000/login");
+      res.redirect("https://servio-api-2.herokuapp.com/login");
       // await res.json({
       //   message: "Logged",
       //   cookies: req.session,
