@@ -5,7 +5,7 @@ const offers = [
     duration: 60,
     materials: false,
     guarantee_time: 30,
-    professionalId: 1,
+    professionalId: 4,
     ClientNeedId: 1,
   },
   {
@@ -14,7 +14,7 @@ const offers = [
     duration: 60,
     materials: false,
     guarantee_time: 30,
-    professionalId: 1,
+    professionalId: 14,
     ClientNeedId: 15,
   },
   {
@@ -23,7 +23,7 @@ const offers = [
     duration: 60,
     materials: false,
     guarantee_time: 30,
-    professionalId: 4,
+    professionalId: 24,
     ClientNeedId: 2,
   },
   {
@@ -32,7 +32,7 @@ const offers = [
     duration: 60,
     materials: false,
     guarantee_time: 30,
-    professionalId: 4,
+    professionalId: 24,
     ClientNeedId: 3,
   },
   {
@@ -41,7 +41,7 @@ const offers = [
     duration: 30,
     materials: true,
     guarantee_time: 30,
-    professionalId: 5,
+    professionalId: 34,
     ClientNeedId: 4,
   },
   {
@@ -50,7 +50,7 @@ const offers = [
     duration: 40,
     materials: true,
     guarantee_time: 30,
-    professionalId: 2,
+    professionalId: 34,
     ClientNeedId: 5,
   },
   {
@@ -59,7 +59,7 @@ const offers = [
     duration: 120,
     materials: true,
     guarantee_time: 30,
-    professionalId: 2,
+    professionalId: 44,
     ClientNeedId: 6,
   },
   {
@@ -68,7 +68,7 @@ const offers = [
     duration: 30,
     materials: false,
     guarantee_time: 0,
-    professionalId: 3,
+    professionalId: 54,
     ClientNeedId: 7,
   },
   {
@@ -77,7 +77,7 @@ const offers = [
     duration: 00,
     materials: false,
     guarantee_time: 0,
-    professionalId: 3,
+    professionalId: 34,
     ClientNeedId: 10,
   },
   {
@@ -86,7 +86,7 @@ const offers = [
     duration: 00,
     materials: false,
     guarantee_time: 0,
-    professionalId: 5,
+    professionalId: 54,
     ClientNeedId: 8,
   },
   {
@@ -95,7 +95,7 @@ const offers = [
     duration: 00,
     materials: false,
     guarantee_time: 0,
-    professionalId: 10,
+    professionalId: 14,
     ClientNeedId: 7,
   },
   {
@@ -104,7 +104,7 @@ const offers = [
     duration: 00,
     materials: false,
     guarantee_time: 0,
-    professionalId: 45,
+    professionalId: 44,
     ClientNeedId: 2,
   },
 ];
