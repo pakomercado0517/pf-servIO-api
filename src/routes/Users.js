@@ -84,7 +84,7 @@ router.get(
       cookies: req.session,
       data: data,
     });
-    res.redirect("https://serv-io.surge.sh/login");
+    res.redirect("https://serv-io.surge.sh");
   }
 );
 
@@ -103,7 +103,7 @@ router.get(
       cookies: req.session,
       data: userResult,
     });
-    res.redirect("https://serv-io.surge.sh/login");
+    res.redirect("https://serv-io.surge.sh");
   }
   // userFunctions.githubAuth
 );
@@ -130,7 +130,7 @@ router.get(
         cookies: req.session,
         data: userResult,
       });
-      res.redirect("https://serv-io.surge.sh/login");
+      res.redirect("https://serv-io.surge.sh");
       // await res.json({
       //   message: "Logged",
       //   cookies: req.session,
