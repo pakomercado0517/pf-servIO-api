@@ -84,7 +84,7 @@ router.get(
       cookies: req.session,
       data: data,
     });
-    res.redirect("https://servio-api-2.herokuapp.com/login");
+    res.redirect("https://serv-io.surge.sh/login");
   }
 );
 
@@ -103,7 +103,7 @@ router.get(
       cookies: req.session,
       data: userResult,
     });
-    res.redirect("https://servio-api-2.herokuapp.com/login");
+    res.redirect("https://serv-io.surge.sh/login");
   }
   // userFunctions.githubAuth
 );
@@ -130,7 +130,7 @@ router.get(
         cookies: req.session,
         data: userResult,
       });
-      res.redirect("https://servio-api-2.herokuapp.com/login");
+      res.redirect("https://serv-io.surge.sh/login");
       // await res.json({
       //   message: "Logged",
       //   cookies: req.session,
