@@ -8,7 +8,9 @@ passport.use(
     {
       clientID: GITHUB_CLIENT_ID,
       clientSecret: GITHUB_CLIENT_SECRET,
-      callbackURL: "http://localhost:3001/user/auth/github/callback",
+      // callbackURL: "http://localhost:3001/user/auth/github/callback",
+      callbackURL:
+        "https://servio-api-2.herokuapp.com/user/auth/github/callback",
     },
     async (accessToken, refreshToken, profile, cb) => {
       console.log("profileeee", profile);

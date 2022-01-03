@@ -40,7 +40,9 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:3001/user/auth/google/callback",
+      // callbackURL: "http://localhost:3001/user/auth/google/callback",
+      callbackURL:
+        "https://servio-api-2.herokuapp.com/user/google/auth/callback",
       // callbackURL: "http://localhost:3000/login",
     },
     async function (accessToken, refreshToken, profile, cb) {
