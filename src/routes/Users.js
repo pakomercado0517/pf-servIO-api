@@ -84,7 +84,7 @@ router.get(
       cookies: req.session,
       data: data,
     });
-    res.redirect("https://servio-api-2.herokuapp.com//login");
+    res.redirect("https://servio-api-2.herokuapp.com/login");
   }
 );
 
@@ -103,7 +103,7 @@ router.get(
       cookies: req.session,
       data: userResult,
     });
-    res.redirect("https://servio-api-2.herokuapp.com//login");
+    res.redirect("https://servio-api-2.herokuapp.com/login");
   }
   // userFunctions.githubAuth
 );
