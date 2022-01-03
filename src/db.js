@@ -2,11 +2,10 @@ require("dotenv").config();
 const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
-const { DB_USER, DB_PASSWORD, DB_HOST, DB_TYPE, DB_NOMBRE } = process.env;
+const { DB_USER, DB_PASSWORD, DB_HOST, DB_NOMBRE, DB_TYPE } = process.env;
 
 // console.log('DB_HOST', DB_HOST);
 
-const { DB_USER, DB_PASSWORD, DB_HOST, DB_NOMBRE, DB_TYPE } = process.env;
 const db = new Sequelize(
   `${DB_TYPE}://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NOMBRE}`,
   {
