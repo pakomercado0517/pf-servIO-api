@@ -6,7 +6,7 @@ const { DB_USER, DB_PASSWORD, DB_HOST, DB_NOMBRE, DB_TYPE } = process.env;
 
 // console.log('DB_HOST', DB_HOST);
 
-const db = new Sequelize(
+const sequelize = new Sequelize(
   `${DB_TYPE}://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NOMBRE}`,
   {
     logging: false, // set to console.log to see the raw SQL queries
