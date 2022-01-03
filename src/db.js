@@ -2,20 +2,31 @@ require("dotenv").config();
 const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
-const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_TYPE, DATABASE_URL } =
+const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_TYPE, DB_NOMBRE } =
   process.env;
 
 // console.log('DB_HOST', DB_HOST);
 
-const sequelize = new Sequelize(
-  `${DB_TYPE}://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/servio`,
-  // `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/servio`,
-  // DATABASE_URL,
+const { DB_USER, DB_PASSWORD, DB_HOST, DB_NOMBRE, DB_TYPE } = process.env;
+const db = new Sequelize(
+  `${DB_TYPE}://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NOMBRE}`,
   {
     logging: false, // set to console.log to see the raw SQL queries
     native: false, // lets Sequelize know we can use pg-native for ~30% more speed
   }
 );
+
+// const sequelize = new Sequelize(
+//   `${DB_TYPE}://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/servio`,
+//   `${DB_TYPE}://b46beb6a97b8eb:f0e8539a@us-cdbr-east-05.cleardb.net/heroku_3afd94c4ff9413a?reconnect=true`,
+
+//   // `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/servio`,
+//   // DATABASE_URL,
+//   {
+//     logging: false, // set to console.log to see the raw SQL queries
+//     native: false, // lets Sequelize know we can use pg-native for ~30% more speed
+//   }
+// );
 
 const basename = path.basename(__filename);
 const modelDefiners = [];
