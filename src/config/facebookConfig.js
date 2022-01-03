@@ -8,7 +8,8 @@ passport.use(
     {
       clientID: FACEBOOK_CLIENT_ID,
       clientSecret: FACEBBOK_CLIENT_SECRET,
-      callbackURL: "http://localhost:3001/user/auth/facebook/callback",
+      callbackURL:
+        "https://servio-api-2.herokuapp.com/user/auth/facebook/callback",
       profileFields: ["id", "displayName", "photos", "email"],
     },
     async (accessToken, refreshToken, profile, cb) => {
