@@ -52,6 +52,9 @@ const { transMap } = require("./src/DbExample/transactions");
 conn.sync({ force: true }).then(() => {
   server.listen(process.env.PORT || 3001, async () => {
     try {
+      (await Profession.bulkCreate(professionsMap))
+        ? console.log("|---Professional---| Created")
+        : console.log("Professional not created");
       await initialFunction();
       (await Professional.bulkCreate(professionalMap))
         ? console.log("|---Professional---| Created")
@@ -62,9 +65,6 @@ conn.sync({ force: true }).then(() => {
       (await ProfessionalOffer.bulkCreate(offerMap))
         ? console.log("|---Professional Offer---| Created")
         : console.log("Professional Offer not created");
-      (await Profession.bulkCreate(professionsMap))
-        ? console.log("|---Professional---| Created")
-        : console.log("Professional not created");
       (await SpecificTechnicalActivity.bulkCreate(tecsMap))
         ? console.log("|---Specific Techniques---| created")
         : console.log("¡¡¡Specific Techniques!!! not created");
