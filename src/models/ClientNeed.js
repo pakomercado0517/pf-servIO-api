@@ -14,7 +14,7 @@ module.exports = (sequelize) => {
       },
       status: {
         type: DataTypes.ENUM,
-        values: ["in offer", "in progress", "done"],
+        values: ["in offer", "in progress", "done", "pending to pay"],
         // allowNull: false,
       },
       location: {
@@ -25,6 +25,8 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         // allowNull: false
       },
+      token: DataTypes.STRING,
+      expiracion: DataTypes.DATE 
       // price: {
       //     type: DataTypes.INTEGER,
       //     // allowNull: false,

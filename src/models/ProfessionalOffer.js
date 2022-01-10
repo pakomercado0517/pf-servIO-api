@@ -10,6 +10,11 @@ module.exports = (sequelize) => {
           type: DataTypes.STRING,
           // allowNull: false,
       },
+      status: {
+        type: DataTypes.ENUM,
+        values: ["in offer", "pending to pay", "hired"]
+        // allowNull: false,
+      },
       price: {
           type: DataTypes.INTEGER,
           // allowNull: false,

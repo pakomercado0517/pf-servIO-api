@@ -4,12 +4,6 @@ module.exports = (sequelize) => {
   return sequelize.define(
     "User",
     {
-      id: {
-        type: DataTypes.INTEGER,
-        unique: true,
-        autoIncrement: true,
-        primaryKey: true,
-      },
       user_name: {
         type: DataTypes.STRING,
         // allowNull: false,
@@ -63,8 +57,12 @@ module.exports = (sequelize) => {
         type: DataTypes.BOOLEAN,
         // allowNull: false
       },
+      rate: {
+        type: DataTypes.FLOAT,
+        // allowNull: false
+      },
       token: DataTypes.STRING,
-      expiracion: DataTypes.DATE,
+      expiracion: DataTypes.DATE 
     },
     {
       // tableName: 'users',

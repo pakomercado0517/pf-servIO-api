@@ -5,7 +5,8 @@ const bcrypt = require("bcrypt");
 const passport = require("passport");
 const enviarEmail = require("../handlers/email");
 const crypto = require("crypto");
-var juice = require("juice");
+const saltRounds = 10;
+// var juice = require("juice");
 // @ts-ignore
 const {
   User,
@@ -21,153 +22,153 @@ const {
 const e = require("express");
 
 module.exports = {
-  // newUser: async (req, res) => {
-  //   const {
-  //     // userName,
-  //     firstName,
-  //     lastName,
-  //     email,
-  //     phone,
-  //     city,
-  //     // state,
-  //     photo,
-  //     dni,
-  //     password,
-  //     verified,
-  //     professional,
-  //     certification_name,
-  //     certification_img,
-  //     status,
-  //     profession,
-  //   } = req.body;
-  //   console.log(req.body);
+  newUser: async (req, res) => {
+    const {
+      // userName,
+      firstName,
+      lastName,
+      email,
+      phone,
+      city,
+      // state,
+      photo,
+      dni,
+      password,
+      verified,
+      professional,
+      certification_name,
+      certification_img,
+      status,
+      profession,
+    } = req.body;
+    console.log(req.body);
 
-  //   error = [];
+    error = [];
 
-  //   // if(!userName || !firstName || !lastName || !email || !phone || !city || !state  || !dniFront|| !dniBack || !password || !password2 ){
-  //   //     error.push({message: 'Please enter all the required fields'})
-  //   // }
-  //   // if(password.length < 6){
-  //   //     error.push({message: 'Password should be at least 6 characters'})
-  //   // }
-  //   // if(password !== password2){
-  //   //     error.push({message: 'The password do not match'})
-  //   // }
+    // if(!userName || !firstName || !lastName || !email || !phone || !city || !state  || !dniFront|| !dniBack || !password || !password2 ){
+    //     error.push({message: 'Please enter all the required fields'})
+    // }
+    // if(password.length < 6){
+    //     error.push({message: 'Password should be at least 6 characters'})
+    // }
+    // if(password !== password2){
+    //     error.push({message: 'The password do not match'})
+    // }
 
-  //   const users = await User.findAll({
-  //     include: [{ model: Professional }],
-  //   });
+    const users = await User.findAll({
+      include: [{ model: Professional }],
+    });
 
-  //   users.map((e) => {
-  //     if (e.email === email) {
-  //       error.push("Email already in use");
-  //     }
-  //     // if(e.userName === userName){
-  //     //     error.push( 'User already in use')
-  //     // }
-  //   });
+    users.map((e) => {
+      if (e.email === email) {
+        error.push("Email already in use");
+      }
+      // if(e.userName === userName){
+      //     error.push( 'User already in use')
+      // }
+    });
 
-  //   if (error.length > 0) {
-  //     res.send(error);
-  //   } else {
-  //     try {
-  //       let hashedPassword = await bcrypt.hash(password, 10);
-  //       let newUser = await User.create({
-  //         // user_name: userName,
-  //         first_name: firstName,
-  //         last_name: lastName,
-  //         email,
-  //         phone: phone ? phone : 00000000,
-  //         city,
-  //         // state,
-  //         photo: photo ? photo : "",
-  //         dni,
-  //         // dni_back:dniBack ? dniBack : '',
-  //         password: hashedPassword,
-  //         verified: verified ? verified : false,
-  //         professional,
-  //       });
+    if (error.length > 0) {
+      res.send(error);
+    } else {
+      try {
+        let hashedPassword = await bcrypt.hash(password, 10);
+        let newUser = await User.create({
+          user_name: userName,
+          first_name: firstName,
+          last_name: lastName,
+          email,
+          phone: phone ? phone : 00000000,
+          city,
+          state,
+          photo: photo ? photo : "",
+          dni,
+          // dni_back:dniBack ? dniBack : '',
+          password: hashedPassword,
+          verified: verified ? verified : false,
+          professional,
+        });
 
-  //       if (professional === "true") {
-  //         let newProfessional = await Professional.create({
-  //           // certification_name:certification_name ? certification_name: '',
-  //           // certification_img:certification_img ? certification_img : '',
-  //           // status : status ? status : 'normal',
-  //           certification_name: "",
-  //           certification_img: "",
-  //           status: "normal",
-  //         });
-  //         let professions = profession.toLowerCase();
-  //         if (typeof professions === "string") {
-  //           professions = professions.split(",");
-  //         }
+        if (professional === "true") {
+          let newProfessional = await Professional.create({
+            // certification_name:certification_name ? certification_name: '',
+            // certification_img:certification_img ? certification_img : '',
+            // status : status ? status : 'normal',
+            certification_name,
+            certification_img,
+            status,
+          });
+          let professions = profession.toLowerCase();
+          if (typeof professions === "string") {
+            professions = professions.split(",");
+          }
 
-  //         const allProfessions = await Profession.findAll({
-  //           where: {
-  //             name: {
-  //               [Op.in]: Array.isArray(professions)
-  //                 ? professions
-  //                 : [professions],
-  //             },
-  //           },
-  //         });
+          const allProfessions = await Profession.findAll({
+            where: {
+              name: {
+                [Op.in]: Array.isArray(professions)
+                  ? professions
+                  : [professions],
+              },
+            },
+          });
 
-  //         await newProfessional.setProfessions(allProfessions);
-  //         await newUser.setProfessional(newProfessional);
-  //       }
-  //       res
-  //         .status(200)
-  //         .send(
-  //           `You are now registered, ${
-  //             firstName + " " + lastName
-  //           } please log in`
-  //         );
-  //     } catch (error) {
-  //       res.status(400).send(error.message);
-  //     }
-  //   }
-  // },
+          await newProfessional.setProfessions(allProfessions);
+          await newUser.setProfessional(newProfessional);
+        }
+        res
+          .status(200)
+          .send(
+            `You are now registered, ${
+              firstName + " " + lastName
+            } please log in`
+          );
+      } catch (error) {
+        res.status(400).send(error.response);
+      }
+    }
+  },
 
-  // login: async (req, res) => {
-  //   try {
-  //     const { email, password } = req.body;
+  login: async (req, res) => {
+    try {
+      const { email, password } = req.body;
 
-  //     const user = await User.findAll({
-  //       where: { email },
-  //     });
+      const user = await User.findAll({
+        where: { email },
+      });
 
-  //     let userType = "";
-  //     if (user.length < 1) {
-  //       res.status(200).send("Mail doesn't exist");
-  //     }
-  //     if (user[0].professional === true) {
-  //       userType = "Professional";
-  //     } else {
-  //       userType = "Client";
-  //     }
+      let userType = "";
+      if (user.length < 1) {
+        res.status(200).send("Mail doesn't exist");
+      }
+      if (user[0].professional === true) {
+        userType = "Professional";
+      } else {
+        userType = "Client";
+      }
 
-  //     if (user.length > 0) {
-  //       bcrypt.compare(password, user[0].password, (err, isMatch) => {
-  //         if (err) {
-  //           res.status(200).send("error");
-  //           throw err;
-  //         }
-  //         if (isMatch) {
-  //           req.session.userId = user[0].id;
-  //           let obj = { message: "Logged", cookies: req.session, userType };
-  //           return res.send(obj);
-  //         } else {
-  //           res.send("Wrong passWord");
-  //         }
-  //       });
-  //     }
-  //     if (user.length < 0) {
-  //       res.status(200).send("Something is wrong");
-  //     }
-  //   } catch (error) {
-  //     // res.status(400).send(error.message)/
-  //   }
-  // },
+      if (user.length > 0) {
+        bcrypt.compare(password, user[0].password, (err, isMatch) => {
+          if (err) {
+            res.status(200).send("error");
+            throw err;
+          }
+          if (isMatch) {
+            req.session.userId = user[0].id;
+            let obj = { message: "Logged", cookies: req.session, userType };
+            return res.send(obj);
+          } else {
+            res.send("Wrong passWord");
+          }
+        });
+      }
+      if (user.length < 0) {
+        res.status(200).send("Something is wrong");
+      }
+    } catch (error) {
+      // res.status(400).send(error.message)/
+    }
+  },
   loginTest: async (req, res) => {
     if (req.session.userId) {
       res.send(true);
@@ -218,6 +219,7 @@ module.exports = {
   },
   getUser: async (req, res) => {
     const { userId } = req.body;
+    console.log(req.session);
     if (userId) {
       const user = await User.findAll({
         where: {
@@ -233,82 +235,6 @@ module.exports = {
     }
   },
 
-  getProfessionalByName: async (req, res) => {
-    const { name } = req.query;
-    try {
-      if (!name) {
-        const professional = await User.findAll({
-          include: [
-            {
-              model: Professional,
-              include: [{ model: Profession }],
-            },
-          ],
-          where: { professional: true },
-        });
-        res.status(200).send(professional);
-      } else {
-        const professional = await User.findAll({
-          include: [
-            {
-              model: Professional,
-              include: [{ model: Profession }],
-            },
-          ],
-          where: { professional: true },
-          where: { first_name: { [Sequelize.Op.iLike]: `%${name}%` } },
-        });
-        res.status(200).send(professional);
-      }
-    } catch (error) {
-      res.status(400).send(error.message);
-    }
-  },
-
-  newSpecificalNeed: async (req, res) => {
-    const {
-      name,
-      description,
-      location,
-      //   price,
-      //   duration,
-      //   guarantee_time,
-      userId,
-    } = req.body;
-    try {
-      if (userId) {
-        const newNeed = await ClientNeed.create({
-          name,
-          description,
-          status: "in offer",
-          location,
-          //   price,
-          //   duration,
-          //   guarantee_time,
-        });
-
-        let allUsers = await User.findAll({
-          where: {
-            id: parseInt(userId),
-          },
-        });
-
-        await newNeed.setUser(allUsers[0]);
-        let userWithNeed = await User.findAll({
-          where: {
-            id: parseInt(userId),
-          },
-          include: [{ model: ClientNeed }],
-        });
-        res.status(200).send(newNeed);
-      } else {
-        res.status(400).send("Please login");
-      }
-    } catch (error) {
-      res.status(400).send(error.message);
-    }
-  },
-
   newTechnicalActivity: async (req, res) => {
     const {
       name,
@@ -319,6 +245,7 @@ module.exports = {
       guarantee,
       guarantee_time,
       job_time,
+      type,
       userId,
     } = req.body;
 
@@ -330,6 +257,7 @@ module.exports = {
         materials,
         description,
         guarantee,
+        type: type ? type : "general",
         guarantee_time,
         job_time,
       });
@@ -344,73 +272,30 @@ module.exports = {
     }
     // }
   },
-  //COMENTAR QUE SE REQUIERE INPUT DIRECTO DE IDS DE USUARIOS
-  newTransaction: async (req, res) => {
-    if (req.session.userId) {
-      try {
-        let newTransaction = await Transactions.create({
-          id: parseInt(req.session.userId),
-        });
-        res.status(200).send(newTransaction);
-      } catch (error) {
-        res.status(400).send(error.message);
-      }
-    } else {
-      res.send("Pleas Login");
-    }
-  },
-  //CONDICIONAR QUE SOLO PUEDAN OFERTAR PROFESIONALES
-  newProfessionalOffer: async (req, res) => {
-    const {
-      name,
-      description,
-      price,
-      duration,
-      materials,
-      guarantee_time,
-      ClientNeedId,
-      UserId,
-    } = req.body;
 
-    const user = await User.findOne({ where: { id: UserId } });
-
-    try {
-      if (user) {
-        if (user.professional === false) {
-          res.status(400).send("Only Professionals can make an offer");
-        } else {
-          const newOffert = await ProfessionalOffer.create({
-            name,
-            description,
-            price,
-            duration,
-            materials,
-            guarantee_time,
-          });
-          let clientNeeds = await ClientNeed.findAll({
-            where: { id: ClientNeedId },
-          });
-          let offert = await Professional.findAll({
-            where: { UserId },
-          });
-          await newOffert.setProfessional(offert[0]);
-          await newOffert.setClientNeed(clientNeeds[0]);
-          res.status(200).send(newOffert);
-        }
-      } else {
-        res.send("user does not exist");
-      }
-    } catch (error) {
-      res.status(400).send(error.message);
-    }
-  },
+  // ******** OTHER
 
   getAllUsers: async (req, res) => {
     try {
       const users = await User.findAll({
-        include: [{ model: Professional }],
+        include: [{ model: ClientReview }],
       });
-      res.status(200).send(users);
+      const rate = users.map((r) => {
+        if (r.ClientReviews !== []) {
+          let userRate = 0;
+          for (let i = 0; i < r.ClientReviews?.length; i++) {
+            userRate += parseInt(r.ClientReviews[i].score);
+          }
+          let average =
+            Math.round((userRate / r.ClientReviews?.length) * 100) / 100;
+          r.rate = average;
+          return r;
+        } else {
+          r.rate = 0;
+          return r;
+        }
+      });
+      res.status(200).send(rate);
     } catch (error) {
       res.status(400).send(error.message);
     }
@@ -436,10 +321,23 @@ module.exports = {
           },
         ],
       });
-      const rate = professionals.filter((r) => {
-        return r;
+      const rate = professionals.map((r) => {
+        if (r.Professional.ClientReviews !== []) {
+          let userRate = 0;
+          for (let i = 0; i < r.Professional.ClientReviews?.length; i++) {
+            userRate += parseInt(r.Professional.ClientReviews[i].score);
+          }
+          let average = userRate / r.Professional.ClientReviews?.length;
+          // let userRate2 = {userRate : average}
+          r.rate = average;
+          return r;
+        } else {
+          // let userRate2 = {userRate : 0}
+          r.rate = 0;
+          return r;
+        }
       });
-      res.status(200).send(professionals);
+      res.status(200).send(rate);
     } catch (error) {
       res.status(400).send(error.message);
     }
@@ -465,10 +363,9 @@ module.exports = {
       let user = await User.findAll({
         where: { id: { [Op.eq]: id } },
       });
-      if (user[0]) {
-        user = await User.findAll({
-          where: { id: { [Op.eq]: id } },
-          //include: [{ model: Professional, include: [{ model: Profession },{model: ClientReview}, {model: SpecificTechnicalActivity}] }],
+      if (user[0] && user.professional === true) {
+        const users = await User.findOne({
+          where: { id },
           include: [
             {
               model: Professional,
@@ -480,7 +377,38 @@ module.exports = {
             },
           ],
         });
-        res.status(200).send(user);
+
+        if (users.Professional.ClientReviews.length) {
+          let userRate = 0;
+          for (let i = 0; i < users.Professional.ClientReviews.length; i++) {
+            userRate += parseInt(users.Professional.ClientReviews[i].score);
+          }
+          let average =
+            Math.round(
+              (userRate / users.Professional.ClientReviews?.length) * 100
+            ) / 100;
+          users.rate = average;
+        } else {
+          users.rate = 0;
+        }
+
+        await users.save();
+        res.status(200).send([users]);
+      } else if (user[0]) {
+        const users = await User.findOne({
+          where: { id },
+          include: [
+            {
+              model: Professional,
+              include: [
+                { model: Profession },
+                { model: ClientReview },
+                { model: SpecificTechnicalActivity },
+              ],
+            },
+          ],
+        });
+        res.status(200).send([users]);
       } else {
         res.status(200).send("El usuario no existe.");
       }
@@ -526,6 +454,9 @@ module.exports = {
             include: [{ model: Profession }],
             include: [{ model: User }],
           },
+          {
+            model: ClientNeed,
+          },
         ],
       });
       res.status(200).send(activities);
@@ -551,93 +482,36 @@ module.exports = {
     }
   },
 
-  getAllNeeds: async (req, res) => {
-    try {
-      const needs = await ClientNeed.findAll({
-        include: [{ model: User }, { model: ProfessionalOffer }],
-      });
-      res.status(200).send(needs);
-    } catch (error) {
-      res.status(400).send(error.message);
-    }
-  },
+  // ************ CLIENT NEEDS
 
-  getAllProfessions: async (req, res) => {
-    const professions = await Profession.findAll({
-      include: [
-        {
-          model: Professional,
-          include: [{ model: User }],
-        },
-      ],
-    });
-    res.status(200).send(professions);
-  },
+  // getByProfessionName: async (req, res) =>{
+  //     const {profession} = req.body
+  //     const professionalArr = profession.split(',')
+  //     try {
+  //         const professionals = await Professional.findAll({
+  //             include:[{
+  //                 model: Profession
+  //             }],
+  //         })
 
-  getAllPorfessionalOffers: async (req, res) => {
-    try {
-      const allOfferts = await ProfessionalOffer.findAll({});
-      res.status(200).send(allOfferts);
-    } catch {
-      res.status(400).send(err.message);
-    }
-  },
-  //MODIFICAR!!!!!!!!
-  getUserReceivedOffers: async (req, res) => {
-    const UserId = req.params.id;
+  // ************ PROFESSIONAL OFFERS
 
-    userNeeds = await ClientNeed.findAll({
-      where: { UserId },
-    });
+  //CONDICIONAR QUE SOLO PUEDAN OFERTAR PROFESIONALES
 
-    if (userNeeds.length > 0) {
-      const needsId = await userNeeds.map((e) => e.id);
-      let receivedOffers = [];
-      for (let i = 0; i < needsId.length; i++) {
-        receivedOffers.push({
-          offer: await ProfessionalOffer.findAll({
-            where: { id: needsId[i] },
-          }),
-          needId: needsId[i],
-        });
-      }
-      res.send(receivedOffers);
-    } else {
-      res.send("Sin Ofertas");
-    }
-  },
-  getNeedReceivedOffers: async (req, res) => {
-    const ClientNeedId = req.params.id;
-    const offers = await ProfessionalOffer.findAll({ where: { ClientNeedId } });
-
-    if (offers.length > 0) {
-      res.send(offers);
-    } else {
-      res.send("No offers found");
-    }
-  },
-  getAllProfessionsName: async (req, res) => {
-    try {
-      let professions = await Profession.findAll({});
-      let names = await professions.map((e) => e.name);
-      res.status(200).send(names);
-    } catch {
-      res.status(404).send(err.message);
-    }
-  },
+  // ************ USER
 
   updateProfile: async (req, res) => {
     const {
       // userName,
       firstName,
       lastName,
-      // email,
+      email,
       phone,
       city,
       state,
       photo,
       dni,
-      // password,
+      password,
       // verified,
       professional,
       certification_name,
@@ -646,17 +520,29 @@ module.exports = {
       profession,
     } = req.body;
     const id = req.params.id;
+    const user = await User.findOne({ where: { id } });
+    let x = false;
+    if (user.email !== email) {
+      user.verified = false;
+      user.token = crypto.randomBytes(20).toString("hex");
+      user.expiracion = Date.now() + 3600000;
+      await user.save();
+      x = true;
+    }
+    // console.log(user)
     try {
+      let newPass = await bcrypt.hash(password, 10);
       await User.update(
         {
           first_name: firstName,
           last_name: lastName,
-          // email,
+          email,
           phone,
           city,
           state,
           photo,
           dni,
+          password: newPass,
           professional,
         },
         { where: { id: id } }
@@ -694,7 +580,16 @@ module.exports = {
         },
       });
       await prof.setProfessions(allProfessions);
-
+      if (x === true) {
+        const usuario = await User.findOne({ where: { id } });
+        const activateUrl = `http://localhost:3000/activate/${usuario.token}`;
+        await enviarEmail.enviar({
+          usuario,
+          subject: "Activar con nuevo email",
+          activateUrl,
+          archivo: `<h2>Activar cuenta</h2><p>Hola, has modificado tu mail, haz click en el siguiente enlace para reactivar tu cuenta, este enlace es temporal, en caso de vencer vuelve a solicitarlo </p><a href=${resetUrl} >Resetea tu password</a><p>Si no puedes acceder a este enlace, visita ${resetUrl}</p><div/>`,
+        });
+      }
       res.send("updated");
     } catch (error) {
       res.send(error.message);
@@ -705,6 +600,24 @@ module.exports = {
 
     res.send("borrado");
   },
+
+  deleteProfessionalActivity: async (req, res) => {
+    const id = req.params.id;
+    if (id) {
+      const specificActivity = await SpecificTechnicalActivity.findOne({
+        where: { id },
+      });
+      if (specificActivity) {
+        specificActivity.destroy();
+        res.status(200).send("La actividad especifica ha sido eliminada.");
+      } else {
+        res.status(404).send("specific activity not found");
+      }
+    } else {
+      res.status(500).send("Por favor inserta un id.");
+    }
+  },
+
   getProfessionalActivities: async (req, res) => {
     const id = req.params.id;
     try {
@@ -716,6 +629,7 @@ module.exports = {
           const professionalId = professional.id;
           const activities = await SpecificTechnicalActivity.findAll({
             where: { ProfessionalId: professionalId },
+            include: [{ model: ClientNeed }],
           });
           if (activities.length > 0) {
             res.status(200).send(activities);
@@ -732,99 +646,47 @@ module.exports = {
       res.status(400).send(error.message);
     }
   },
-  getNeedsById: async (req, res) => {
-    const id = req.params.id;
-    try {
-      if (id > 0) {
-        const needs = await ClientNeed.findAll({
-          where: { UserId: id },
-        });
-        if (needs) {
-          res.status(200).send(needs);
-        } else {
-          res.status(200).send("User does not have any need");
-        }
-      } else {
-        res.status(200).send("Please insert an id");
-      }
-    } catch (error) {
-      res.status(400).send(error.message);
-    }
-  },
 
-  getById: async (req, res) => {
-    const id = req.params.id;
-    if (id) {
-      const need = await ClientNeed.findOne({
-        where: {
-          id,
-        },
-      });
-      res.status(200).send(need);
-    } else {
-      res.status(400).send("Please insert an id");
-    }
-  },
-  // newSpecificalNeed: async (req, res) =>{
-  //     const {name, description, location} = req.body
-  //     const newNeed = await ClientNeed.create({
-  //         name,
-  //         description,
-  //         location,
-  //         status: 'in offer'
-  //     })
-  //     res.send(newNeed)
-  // },
-  // getByProfessionName: async (req, res) =>{
-  //     const {profession} = req.body
-  //     const professionalArr = profession.split(',')
-  //     try {
-  //         const professionals = await Professional.findAll({
-  //             include:[{
-  //                 model: Profession
-  //             }],
-  //         })
-
-  getById: async (req, res) => {
-    const id = req.params.id;
-    if (id) {
-      const need = await ClientNeed.findOne({
-        where: {
-          id,
-        },
-      });
-      res.status(200).send(need);
-    } else {
-      res.status(400).send("Please insert an id");
-    }
-  },
   enviarToken: async (req, res) => {
     const { email } = req.body;
-    const usuario = await User.findOne({ where: { email } });
-    if (!usuario) {
-      res.send("No existe esa cuenta");
+    if (email) {
+      const usuario = await User.findOne({ where: { email } });
+      console.log(usuario);
+      if (!usuario) {
+        res.send({ message: "No existe esa cuenta" });
+      } else {
+        if (usuario.token === null) {
+          usuario.token = crypto.randomBytes(20).toString("hex");
+          usuario.expiracion = Date.now() + 3600000;
+        }
+        //guardarlos en la base de datos
+        await usuario.save();
+
+        //url de reset
+        const resetUrl = `http://localhost:3000/forget-password/${usuario.token}`;
+        const activeUrl = ` http://localhost:3000/activate/${usuario.token}`;
+        //Enviar correo con el token
+
+        // console.log(email, type)
+        if (usuario.verified === true) {
+          await enviarEmail.enviar({
+            usuario,
+            subject: "Password Reset",
+            resetUrl,
+            archivo: `<h2>Restablecer Password</h2><p>Hola, has solicitado reestablecer tu password, haz click en el siguiente enlace para reestablecerlo, este enlace es temporal, en caso de vencer vuelve a solicitarlo </p><a href=${resetUrl} >Resetea tu password</a><p>Si no puedes acceder a este enlace, visita ${resetUrl}</p><div/>`,
+          });
+        } else {
+          await enviarEmail.enviar({
+            usuario,
+            subject: "Verify your account",
+            activeUrl,
+            archivo: `<h2>Activar tu cuenta</h2><p>Hola, has solicitado reestablecer tu password, lamentablemente tu cuenta no se encuentra activada, por favor activala primero, para ello  haz click en el siguiente enlace, este enlace es temporal, en caso de vencer vuelve a solicitarlo </p><a href=${activeUrl} >Activa tu cuenta</a><p>Si no puedes acceder a este enlace, visita ${activeUrl}</p><div/>`,
+          });
+        }
+        res.send({ message: "Se envio un mensaje a tu correo" });
+      }
     } else {
-      usuario.token = crypto.randomBytes(20).toString("hex");
-      usuario.expiracion = Date.now() + 3600000;
-
-      //guardarlos en la base de datos
-      await usuario.save();
-
-      //url de reset
-      const resetUrl = `http://${req.headers.host}/user/reestablecer/${usuario.token}`;
-
-      //Enviar correo con el token
-
-      // console.log(resetUrl)
-
-      await enviarEmail.enviar({
-        usuario,
-        subject: "Password Reset",
-        resetUrl,
-        archivo: `<h2>Restablecer Password</h2><p>Hola, has solicitado reestablecer tu password, haz click en el siguiente enlace para reestablecerlo, este enlace es temporal, en caso de vencer vuelve a solicitarlo </p><a href=${resetUrl} >Resetea tu password</a><p>Si no puedes acceder a este enlace, visita ${resetUrl}</p><div/>`,
-      });
-      // res.redirect('/iniciar-sesion'/)
-      res.send("Se envio un mensaje a tu correo");
+      res.send({ message: "Envia un email valido" });
     }
   },
 
@@ -836,12 +698,14 @@ module.exports = {
     });
 
     if (!usuario) {
-      res.send("Token invalido");
+      res.send(false);
+    } else {
+      res.send(true);
     }
-    res.send({ estado: "valido", token: req.params.token });
   },
 
   actualizarPassword: async (req, res) => {
+    const { password } = req.body;
     const usuario = await User.findOne({
       where: {
         token: req.params.token,
@@ -852,20 +716,72 @@ module.exports = {
     });
 
     if (!usuario) {
-      req.flash("error", "No valido"), res.redirect("/reestablecer/");
+      // req.flash("error", "No valido"),
+      res.send("INVALIDO");
+    } else {
+      usuario.password = bcrypt.hashSync(
+        Object.keys(req.body)[0],
+        bcrypt.genSaltSync(10)
+      );
+      usuario.token = null;
+      usuario.expiracion = null;
+      console.log(Object.keys(req.body)[0]);
+      //guardar nuevo password
+      await usuario.save();
+      res.send("Password Restored");
     }
+  },
 
-    //haashear el nuevo password para
-    usuario.password = bcrypt.hashSync(
-      req.body.password,
-      bcrypt.genSaltSync(10)
-    );
-    usuario.token = null;
-    usuario.expiracion = null;
+  solicitarActivar: async (req, res) => {
+    const { email } = req.body;
+    if (email) {
+      const usuario = await User.findOne({ where: { email } });
+      // console.log(usuario)
+      if (!usuario) {
+        res.send({ message: "No existe esa cuenta" });
+      } else {
+        if (usuario.token === null) {
+          usuario.token = crypto.randomBytes(20).toString("hex");
+          usuario.expiracion = Date.now() + 3600000;
+          await usuario.save();
+        }
 
-    //guardar nuevo password
-    await usuario.save();
-    res.send("Tu password se ha modificado correctamente");
+        //url de reset
+        const activeUrl = ` http://localhost:3000/activate/${usuario.token}`;
+        //Enviar correo con el token
+
+        // console.log(email, type)
+        await enviarEmail.enviar({
+          usuario,
+          subject: "Verify your account",
+          activeUrl,
+          archivo: `<h2>Verifica tu cuenta</h2><p>Hola, has solicitado que reenviemos el mail para activar tu cuenta, haz click en el siguiente enlace para activar tu cuenta, este enlace es temporal, en caso de vencer vuelve a solicitarlo </p><a href=${activeUrl} >Activa tu cuenta</a><p>Si no puedes acceder a este enlace, visita ${activeUrl}</p><div/>`,
+        });
+
+        res.send({ message: "Se envio un mensaje a tu correo" });
+      }
+    } else {
+      res.send({ message: "Envia un email valido" });
+    }
+  },
+  activarCuenta: async (req, res) => {
+    const usuario = await User.findOne({
+      where: {
+        token: req.params.token,
+        expiracion: {
+          [Op.gte]: Date.now(),
+        },
+      },
+    });
+    if (!usuario) {
+      // req.flash("error", "No valido"),
+      res.send("INVALIDO");
+    } else {
+      (usuario.verified = true), (usuario.token = null);
+      usuario.expiracion = null;
+      await usuario.save();
+      res.send("Cuenta Activada");
+    }
   },
 
   deleteByUserId: async (req, res) => {
@@ -913,44 +829,6 @@ module.exports = {
     next();
   },
 
-  updateNeed: async (req, res) => {
-    const {
-      name,
-      description,
-      location,
-      status, //   price,//   duration,//   guarantee_time
-    } = req.body;
-    const id = req.params.id;
-    try {
-      const need = await ClientNeed.findOne({
-        where: { id },
-      });
-
-      if (need) {
-        need.name = name ? name : need.name;
-        need.description = description ? description : need.description;
-        need.location = location ? location : need.location;
-        if (
-          status === "done" ||
-          status === "in progress" ||
-          status === "in offer"
-        ) {
-          need.status = status;
-        } else {
-          need.status = need.status;
-        }
-
-        await need.save();
-
-        res.status(200).send(need);
-      } else {
-        res.status(400).send("Inserta Id de necesidad existente");
-      }
-    } catch (error) {
-      res.status(400).send(error.message);
-    }
-  },
-
   updateActivity: async (req, res) => {
     const {
       name,
@@ -989,17 +867,6 @@ module.exports = {
       res.status(400).send(error.message);
     }
   },
-  getNeedByName: async (req, res) => {
-    try {
-      const need = await ClientNeed.findAll({
-        include: [{ model: User }],
-        where: { name: { [Sequelize.Op.iLike]: `%${req.query.name}%` } },
-      });
-      res.status(200).send(need);
-    } catch (error) {
-      res.status(400).send(error.message);
-    }
-  },
 
   githubAuth: async (req, res) => {
     const user = req.user._json;
@@ -1018,21 +885,124 @@ module.exports = {
       res.redirect("http://localhost:3000/login");
     }
   },
+  getAllCities: async (req, res) => {
+    const users = await User.findAll({});
+    let cities = [];
+    users.map((e) => {
+      if (cities.indexOf(e.city) === -1) cities.push(e.city);
+    });
 
+    res.send(cities);
+  },
+  githubLog: async (req, res, next) => {
+    const {
+      userName,
+      firstName,
+      lastName,
+      email,
+      photo,
+      certification_name,
+      certification_img,
+    } = req.body;
+    try {
+      const findGithubUser = await User.findOne({ where: { email: email } });
+      if (findGithubUser) {
+        res.send(findGithubUser);
+      } else {
+        const user = await User.create({
+          user_name: userName,
+          email,
+          photo,
+          first_name: firstName,
+          last_name: lastName,
+          professional: false,
+          professions: [],
+        });
 
-  getOffersByUserId: async (req, res) => {
-    const id = req.params.id
-    try{
-      
-      const professional = await Professional.findOne({where: {UserId: id}})
-      const ProfessionalId = professional.id
-
-      const offers = await ProfessionalOffer.findAll({ where: { ProfessionalId }})
-      res.send(offers)
-
-    }catch(error){
-      console.log(error)
+        let newProfessional = await Professional.create({
+          certification_name,
+          certification_img,
+          status: "normal",
+        });
+        await user.setProfessional(newProfessional);
+        res.send(user);
+      }
+    } catch (error) {
+      res.send(error);
     }
-  }
+  },
+  googleLog: async (req, res, next) => {
+    const {
+      userName,
+      firstName,
+      lastName,
+      email,
+      photo,
+      certification_name,
+      certification_img,
+    } = req.body;
+    try {
+      const findGoogleUser = await User.findOne({ where: { email: email } });
+      if (findGoogleUser) {
+        res.send(findGoogleUser);
+      } else {
+        const user = await User.create({
+          user_name: userName,
+          email,
+          photo,
+          first_name: firstName,
+          last_name: lastName,
+          professional: false,
+          professions: [],
+        });
 
+        let newProfessional = await Professional.create({
+          certification_name,
+          certification_img,
+          status: "normal",
+        });
+        await user.setProfessional(newProfessional);
+        res.send(user);
+      }
+    } catch (error) {
+      res.send(error);
+    }
+  },
+  facebookLog: async (req, res, next) => {
+    const {
+      userName,
+      firstName,
+      lastName,
+      email,
+      photo,
+      certification_name,
+      certification_img,
+    } = req.body;
+    try {
+      const findFacebookUser = await User.findOne({ where: { email: email } });
+      if (findFacebookUser) {
+        res.send(findFacebookUser);
+      } else {
+        const user = await User.create({
+          user_name: userName,
+          email,
+          photo,
+          first_name: firstName,
+          last_name: lastName,
+          professional: false,
+          professions: [],
+        });
+
+        let newProfessional = await Professional.create({
+          certification_name,
+          certification_img,
+          status: "normal",
+        });
+        await user.setProfessional(newProfessional);
+        res.send(user);
+      }
+    } catch (error) {
+      res.send(error);
+    }
+  },
 };

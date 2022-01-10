@@ -2,6 +2,8 @@ const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
 const { User, Professional, Profession } = require("../db");
 const { Op } = require("sequelize");
+const crypto = require("crypto");
+
 
 module.exports = (passport) => {
   passport.serializeUser((user, done) => {
@@ -61,13 +63,16 @@ module.exports = (passport) => {
             email: email,
             password: pass,
             first_name: firstName,
-            last_name: lastName,
+            last_name: lastName, 
             phone,
             city,
             state,
             photo,
-            verified,
+            dni,
+            verified: false,
             professional,
+            token:crypto.randomBytes(20).toString("hex"),
+            expiracion : Date.now() + 3600000
             // certificacion_name,
             // certification_img,
             // status,
@@ -83,6 +88,9 @@ module.exports = (passport) => {
           if (typeof profession === "string") {
             professions = professions.split(",");
           }
+          
+          
+
           let allProfessions = await Profession.findAll({
             where: {
               name: {
@@ -117,8 +125,8 @@ module.exports = (passport) => {
         try {
           const user = await User.findOne({ where: { email: email } });
           if (!user) return done(null, false);
-          let pass = await bcrypt.compare(password, user.password);
-          console.log("pass:", pass);
+          let pass = await bcrypt.compare(password, user.password); 
+          // console.log("pass:", pass);
           if (!pass) return done(null, false);
           done(null, user);
         } catch (error) {
