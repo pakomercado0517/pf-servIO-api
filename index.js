@@ -51,33 +51,33 @@ const { transMap } = require("./src/DbExample/transactions");
 
 conn.sync({ force: false }).then(() => {
   server.listen(process.env.PORT || 3001, async () => {
-    // try {
-    //   (await Profession.bulkCreate(professionsMap))
-    //     ? console.log("|---Professional---| Created")
-    //     : console.log("Professional not created");
-    //   await initialFunction();
-    //   (await Professional.bulkCreate(professionalMap))
-    //     ? console.log("|---Professional---| Created")
-    //     : console.log("Professional not created");
-    //   (await ClientNeed.bulkCreate(needMap))
-    //     ? console.log("|---Client Need---| Created")
-    //     : console.log("Client Need not created");
-    //   (await ProfessionalOffer.bulkCreate(offerMap))
-    //     ? console.log("|---Professional Offer---| Created")
-    //     : console.log("Professional Offer not created");
-    //   (await SpecificTechnicalActivity.bulkCreate(tecsMap))
-    //     ? console.log("|---Specific Techniques---| created")
-    //     : console.log("¡¡¡Specific Techniques!!! not created");
-    //   (await Transactions.bulkCreate(transMap))
-    //     ? console.log("|---Transactions---| created")
-    //     : console.log("¡¡¡Transactions!!! not created");
-    //   (await ClientReview.bulkCreate(reviewMap))
-    //     ? console.log("|---Client Review---| Created")
-    //     : console.log("Client Review not created");
-    //   await userProfessionMap();
-    // } catch (err) {
-    //   // console.log(err);
-    // }
+    try {
+      (await Profession.bulkCreate(professionsMap))
+        ? console.log("|---Professional---| Created")
+        : console.log("Professional not created");
+      await initialFunction();
+      (await Professional.bulkCreate(professionalMap))
+        ? console.log("|---Professional---| Created")
+        : console.log("Professional not created");
+      (await ClientNeed.bulkCreate(needMap))
+        ? console.log("|---Client Need---| Created")
+        : console.log("Client Need not created");
+      (await ProfessionalOffer.bulkCreate(offerMap))
+        ? console.log("|---Professional Offer---| Created")
+        : console.log("Professional Offer not created");
+      (await SpecificTechnicalActivity.bulkCreate(tecsMap))
+        ? console.log("|---Specific Techniques---| created")
+        : console.log("¡¡¡Specific Techniques!!! not created");
+      (await Transactions.bulkCreate(transMap))
+        ? console.log("|---Transactions---| created")
+        : console.log("¡¡¡Transactions!!! not created");
+      (await ClientReview.bulkCreate(reviewMap))
+        ? console.log("|---Client Review---| Created")
+        : console.log("Client Review not created");
+      await userProfessionMap();
+    } catch (err) {
+      // console.log(err);
+    }
 
     console.log("Server is running on port 3001");
   });
