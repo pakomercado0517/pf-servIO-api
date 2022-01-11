@@ -902,9 +902,6 @@ module.exports = {
       lastName,
       email,
       photo,
-      city,
-      state,
-      dni,
       certification_name,
       certification_img,
     } = req.body;
@@ -919,10 +916,6 @@ module.exports = {
           photo,
           first_name: firstName,
           last_name: lastName,
-          phone: phone ? phone : 00000000,
-          city,
-          state,
-          dni,
           professional: false,
           professions: [],
         });
@@ -946,9 +939,6 @@ module.exports = {
       lastName,
       email,
       photo,
-      city,
-      state,
-      dni,
       certification_name,
       certification_img,
     } = req.body;
@@ -963,10 +953,6 @@ module.exports = {
           photo,
           first_name: firstName,
           last_name: lastName,
-          phone: phone ? phone : 00000000,
-          city,
-          state,
-          dni,
           professional: false,
           professions: [],
         });
@@ -990,9 +976,6 @@ module.exports = {
       lastName,
       email,
       photo,
-      city,
-      state,
-      dni,
       certification_name,
       certification_img,
     } = req.body;
@@ -1007,10 +990,6 @@ module.exports = {
           photo,
           first_name: firstName,
           last_name: lastName,
-          phone: phone ? phone : 00000000,
-          city,
-          state,
-          dni,
           professional: false,
           professions: [],
         });
