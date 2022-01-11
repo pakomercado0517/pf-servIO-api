@@ -56,8 +56,54 @@ module.exports = {
     }
   },
 
+  // newProfessionalOffer: async (req, res) => {
+  //   console.log("body...", req.body);
+  //   const {
+  //     name,
+  //     description,
+  //     price,
+  //     duration,
+  //     materials,
+  //     guarantee_time,
+  //     ClientNeedId,
+  //     UserId,
+  //   } = req.body;
+
+  //   const user = await User.findOne({ where: { id: UserId } });
+
+  //   try {
+  //     if (user) {
+  //       if (user.professional === false) {
+  //         res.status(400).send("Only Professionals can make an offer");
+  //       } else {
+  //         const newOffert = await ProfessionalOffer.create({
+  //           name,
+  //           description,
+  //           price,
+  //           duration,
+  //           materials,
+  //           guarantee_time,
+  //           status: "in offer",
+  //         });
+  //         let clientNeeds = await ClientNeed.findAll({
+  //           where: { id: ClientNeedId },
+  //         });
+  //         let setuser = await User.findOne({
+  //           where: { id: UserId },
+  //         });
+  //         await newOffert.setUser(setuser);
+  //         await newOffert.setClientNeed(clientNeeds[0]);
+  //         res.status(200).send(newOffert);
+  //       }
+  //     } else {
+  //       res.send("user does not exist");
+  //     }
+  //   } catch (error) {
+  //     res.status(400).send(error.message);
+  //   }
+  // },
+
   newProfessionalOffer: async (req, res) => {
-    console.log("body...", req.body);
     const {
       name,
       description,
@@ -70,10 +116,12 @@ module.exports = {
     } = req.body;
 
     const user = await User.findOne({ where: { id: UserId } });
-
+    console.log("user: ", user);
     try {
       if (user) {
+        console.log("boolean: ", user.professional);
         if (user.professional === false) {
+          console.log("HAY PEDO EN PROFESIONAL");
           res.status(400).send("Only Professionals can make an offer");
         } else {
           const newOffert = await ProfessionalOffer.create({
@@ -85,20 +133,26 @@ module.exports = {
             guarantee_time,
             status: "in offer",
           });
+          console.log("offert: ", newOffert);
           let clientNeeds = await ClientNeed.findAll({
             where: { id: ClientNeedId },
           });
+          console.log("clientNeed: ", clientNeeds);
           let setuser = await User.findOne({
             where: { id: UserId },
           });
+
+          console.log("user2: ", setuser);
           await newOffert.setUser(setuser);
           await newOffert.setClientNeed(clientNeeds[0]);
           res.status(200).send(newOffert);
         }
       } else {
+        console.log("USUARIO NO EXISTE");
         res.send("user does not exist");
       }
     } catch (error) {
+      console.log(error);
       res.status(400).send(error.message);
     }
   },
