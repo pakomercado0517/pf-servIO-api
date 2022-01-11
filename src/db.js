@@ -109,8 +109,8 @@ Professional.hasMany(SpecificTechnicalActivity);
 SpecificTechnicalActivity.belongsTo(Professional);
 
 //Relacion Profesional - ProfessionalOffer
-// Professional.hasMany(ProfessionalOffer);
-// ProfessionalOffer.belongsTo(Professional);
+Professional.hasMany(ProfessionalOffer);
+ProfessionalOffer.belongsTo(Professional);
 
 //Relacion Profesional - ClientReview
 Professional.hasMany(ClientReview);
