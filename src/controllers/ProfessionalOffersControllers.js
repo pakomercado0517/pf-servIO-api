@@ -1,21 +1,20 @@
-
 const { User, ProfessionalOffer, ClientNeed } = require("../db.js");
 
 module.exports = {
   getOffersByUserId: async (req, res) => {
-    const id = req.params.id
-    try{
-      const offers = await ProfessionalOffer.findAll({ where: { UserId: id }})
-      if(!offers[0]) {
-        res.send("No offers found")
+    const id = req.params.id;
+    try {
+      const offers = await ProfessionalOffer.findAll({ where: { UserId: id } });
+      if (!offers[0]) {
+        res.send("No offers found");
       } else {
-        res.send(offers)
+        res.send(offers);
       }
-    }catch(error){
-      console.log(error)
+    } catch (error) {
+      console.log(error);
     }
   },
-  
+
   getAllPorfessionalOffers: async (req, res) => {
     try {
       const allOfferts = await ProfessionalOffer.findAll({});
@@ -45,7 +44,6 @@ module.exports = {
     } else {
       res.send("Sin Ofertas");
     }
-
   },
 
   getNeedReceivedOffers: async (req, res) => {
@@ -59,6 +57,7 @@ module.exports = {
   },
 
   newProfessionalOffer: async (req, res) => {
+    console.log("body...", req.body);
     const {
       name,
       description,
@@ -84,7 +83,7 @@ module.exports = {
             duration,
             materials,
             guarantee_time,
-            status: "in offer"
+            status: "in offer",
           });
           let clientNeeds = await ClientNeed.findAll({
             where: { id: ClientNeedId },
@@ -92,7 +91,7 @@ module.exports = {
           let setuser = await User.findOne({
             where: { id: UserId },
           });
-          await newOffert.setUser(setuser)
+          await newOffert.setUser(setuser);
           await newOffert.setClientNeed(clientNeeds[0]);
           res.status(200).send(newOffert);
         }
@@ -107,25 +106,21 @@ module.exports = {
   deleteOfferById: async (req, res) => {
     const id = req.params.id;
     const offer = await ProfessionalOffer.findOne({ where: { id } });
-    if (!offer){
-      res.send("La oferta ya ha sido eliminada o no existe")
-    }else{
+    if (!offer) {
+      res.send("La oferta ya ha sido eliminada o no existe");
+    } else {
       offer.destroy();
-    res.send( "La oferta ha sido eliminada.");
+      res.send("La oferta ha sido eliminada.");
     }
   },
 
   updateOffer: async (req, res) => {
     const id = req.params.id;
     try {
-      await ProfessionalOffer.update(
-        req.body,
-        { where: { id } }
-      );
+      await ProfessionalOffer.update(req.body, { where: { id } });
       res.send("updated");
     } catch (error) {
       res.send(error.message);
     }
   },
-
-}
+};
