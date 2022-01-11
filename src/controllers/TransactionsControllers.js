@@ -8,7 +8,6 @@ const {
 } = require("../db.js");
 const enviarEmail = require("../handlers/email");
 const crypto = require("crypto");
-const { FRONT_URL } = process.env;
 module.exports = {
   getAllTransactions: async (req, res) => {
     try {
@@ -180,7 +179,7 @@ module.exports = {
         need.token = token;
         need.expiracion = Date.now() + 3600000;
         await need.save();
-        const confirmUrl = `${FRONT_URL}/confirm/${token}`;
+        const confirmUrl = `http://localhost:3000/confirm/${token}`;
         await enviarEmail.enviar({
           usuario,
           subject: "Confirmar Servicio culminado",
@@ -191,6 +190,21 @@ module.exports = {
       res.status(200).send("Se ha enviado correo de confiamcion");
     } else {
       res.status(200).send("No se ha podido encontrar esa necesidad");
+    }
+  },
+
+  deleteTransaction: async (req, res) => {
+    const { id } = req.params;
+    const transaction = await Transactions.findOne({ where: { id } });
+    if (transaction) {
+      try {
+        transaction.destroy();
+        res.send("La transaccion ha sido eliminada.");
+      } catch (error) {
+        res.status(400).send("Somthings wrong when delete transaction", error);
+      }
+    } else {
+      res.status(200).send("La transaccion ya ha sido eliminada o no existe");
     }
   },
 };
