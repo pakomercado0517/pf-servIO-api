@@ -11,12 +11,40 @@ const crypto = require("crypto");
 const { FRONT_URL } = process.env;
 module.exports = {
   getAllTransactions: async (req, res) => {
-    const allTransactions = await Transactions.findAll({});
-    res.send(allTransactions);
+    try {
+      const allTransactions = await Transactions.findAll({});
+      if (typeof allTransactions === "array" && !allTransactions.length)
+        return res.send("No hay transacciones");
+      res.send(allTransactions);
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  },
+
+  getAllTransactionsById: async (req, res) => {
+    const { id } = req.params;
+
+    try {
+      const allTransactions = await Transactions.findAll({
+        include: [
+          {
+            model: ClientNeed,
+          },
+        ],
+        where: {
+          UserId: id,
+        },
+      });
+      if (typeof allTransactions === "array" && !allTransactions.length)
+        return res.send("No hay transacciones para este usuario");
+      res.send(allTransactions);
+    } catch (error) {
+      res.status(400).send(error);
+    }
   },
 
   newTransaction: async (req, res) => {
-    const { data } = req.body;
+    const { data, UserId } = req.body;
 
     let response = [];
 
@@ -130,6 +158,7 @@ module.exports = {
       const { dataValues } = await Transactions.create({
         data: response,
         status: "pending to pay",
+        UserId,
       });
       res.send({
         ...dataValues,
