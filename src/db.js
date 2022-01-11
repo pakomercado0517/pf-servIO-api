@@ -8,12 +8,13 @@ const {
   DB_PSQL_HOST,
   DB_PSQL_NOMBRE,
   DB_PSQL_TYPE,
+  DB_PSQL_PORT,
 } = process.env;
 
 // console.log('DB_HOST', DB_HOST);
 
 const sequelize = new Sequelize(
-  `${DB_PSQL_TYPE}://${DB_PSQL_USER}:${DB_PSQL_PASSWORD}@${DB_PSQL_HOST}/${DB_PSQL_NOMBRE}`,
+  `${DB_PSQL_TYPE}://${DB_PSQL_USER}:${DB_PSQL_PASSWORD}@${DB_PSQL_HOST}:${DB_PSQL_PORT}/${DB_PSQL_NOMBRE}`,
   {
     logging: false, // set to console.log to see the raw SQL queries
     native: false, // lets Sequelize know we can use pg-native for ~30% more speed
