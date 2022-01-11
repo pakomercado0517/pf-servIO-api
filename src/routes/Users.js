@@ -4,10 +4,7 @@ const userFunctions = require("../controllers/index.js");
 const passport = require("passport");
 const { User } = require("../db");
 const enviarEmail = require("../handlers/email");
-const constants = {
-  localhost: "http://localhost:3001",
-  surge: "https://serv-io.surge.sh",
-};
+const { FRONT_URL } = process.env;
 
 require("../config/googleConfig");
 
@@ -50,7 +47,7 @@ router.post(
   },
   async (req, res, next) => {
     const usuario = await User.findOne({ where: { email: req.body.email } });
-    const activateUrl = `${constants.surge}/activate/${usuario.token}`;
+    const activateUrl = `${FRONT_URL}/activate/${usuario.token}`;
     await enviarEmail.enviar({
       usuario,
       subject: "Activate Account",
@@ -157,7 +154,7 @@ router.get(
         data: userResult,
       });
     }
-    res.redirect(`${constants.surge}/login`);
+    res.redirect(`${FRONT_URL}/login`);
   }
   // userFunctions.githubAuth
 );
@@ -184,7 +181,7 @@ router.get(
         cookies: req.session,
         data: userResult,
       });
-      res.redirect(`${constants.surge}/login`);
+      res.redirect(`${FRONT_URL}/login`);
       // await res.json({
       //   message: "Logged",
       //   cookies: req.session,

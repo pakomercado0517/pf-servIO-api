@@ -1,10 +1,7 @@
 const { Router } = require("express");
 const router = Router();
 const functions = require("../controllers/MercadoPago");
-const constants = {
-  localhost: "http://localhost:3001",
-  surge: "https://serv-io.surge.sh",
-};
+const { FRONT_URL } = process.env;
 
 // POST
 router.post("/", functions.newTransaction);
@@ -14,12 +11,12 @@ router.get("/succes", functions.succesTransaction);
 
 router.get("/pending", (req, res) => {
   console.log(req.query);
-  res.redirect(`${constants.surge}`);
+  res.redirect(`${FRONT_URL}`);
 });
 
 router.get("/failure", (req, res) => {
   console.log(req.query);
-  res.redirect(`${constants.surge}/cart`);
+  res.redirect(`${FRONT_URL}/cart`);
 });
 
 module.exports = router;

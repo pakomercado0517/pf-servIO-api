@@ -6,6 +6,7 @@ const passport = require("passport");
 const enviarEmail = require("../handlers/email");
 const crypto = require("crypto");
 const saltRounds = 10;
+const { FRONT_URL } = process.env;
 // var juice = require("juice");
 // @ts-ignore
 const {
@@ -582,7 +583,7 @@ module.exports = {
       await prof.setProfessions(allProfessions);
       if (x === true) {
         const usuario = await User.findOne({ where: { id } });
-        const activateUrl = `http://localhost:3000/activate/${usuario.token}`;
+        const activateUrl = `${FRONT_URL}/activate/${usuario.token}`;
         await enviarEmail.enviar({
           usuario,
           subject: "Activar con nuevo email",
@@ -663,8 +664,8 @@ module.exports = {
         await usuario.save();
 
         //url de reset
-        const resetUrl = `http://localhost:3000/forget-password/${usuario.token}`;
-        const activeUrl = ` http://localhost:3000/activate/${usuario.token}`;
+        const resetUrl = `${FRONT_URL}/forget-password/${usuario.token}`;
+        const activeUrl = ` ${FRONT_URL}/activate/${usuario.token}`;
         //Enviar correo con el token
 
         // console.log(email, type)
@@ -747,7 +748,7 @@ module.exports = {
         }
 
         //url de reset
-        const activeUrl = ` http://localhost:3000/activate/${usuario.token}`;
+        const activeUrl = ` ${FRONT_URL}/activate/${usuario.token}`;
         //Enviar correo con el token
 
         // console.log(email, type)
@@ -873,7 +874,7 @@ module.exports = {
     const name = user.name.split(" ");
     const findUser = await User.findOne({ where: { email: user.login } });
     if (findUser) {
-      res.redirect("http://localhost:3000/login");
+      res.redirect(`${FRONT_URL}/login`);
     } else {
       User.create({
         first_name: user.name[0],
@@ -882,7 +883,7 @@ module.exports = {
         photo: user.avatar_url,
         professional: false,
       });
-      res.redirect("http://localhost:3000/login");
+      res.redirect(`${FRONT_URL}/login`);
     }
   },
   getAllCities: async (req, res) => {
