@@ -92,7 +92,7 @@ User.hasMany(ClientReview);
 ClientReview.belongsTo(User);
 
 User.hasMany(ProfessionalOffer);
-ProfessionaleOffer.belongsTo(User);
+ProfessionalOffer.belongsTo(User);
 
 //*************************************RELACIONES Profesional****************************************************************
 
