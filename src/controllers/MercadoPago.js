@@ -37,6 +37,8 @@ module.exports = {
       });
   },
   succesTransaction: async (req, res) => {
+    let clientNeedIds = [];
+
     // Find transaction that match with id
 
     const id = req.query.external_reference;
@@ -59,41 +61,124 @@ module.exports = {
           updateOnDuplicate: ["status"],
         });
       } catch (error) {
-        res.status(400).send(error.message);
+        res
+          .status(400)
+          .send(
+            'Errors on "UPDATE EVERY STATE OF CLIENT NEED ID ONLY" ',
+            error.message
+          );
       }
     }
 
+    // UPDATE STATUS OF TRANSACTION
+
+    try {
+      transaction.status = "approved";
+      await transaction.save();
+    } catch (error) {
+      res
+        .status(400)
+        .send('Errors on "UPDATE STATUS TRANSACTION" ', error.message);
+    }
+
     // UPDATE STATUS OF PROFESSIONALOFFERS TO HIRED
+
+    const dataOffer = transaction.data.filter((el) => el.type === "offer");
+
+    if (dataOffer[0]) {
+      try {
+        const updateOffer = dataOffer.map((el, index) => {
+          return {
+            status: "hired",
+            id: el.ProfessionalOfferId,
+          };
+        });
+        await ProfessionalOffer.bulkCreate(updateOffer, {
+          updateOnDuplicate: ["status"],
+        });
+      } catch (error) {
+        res
+          .status(400)
+          .send(
+            'Errors on "UPDATE STATUS OF PROFESSIONALOFFERS TO HIRED" ',
+            error.message
+          );
+      }
+    }
+
+    // CHANGE STATUS TO REJECTED TO REST OF OFFERS THAT NOT MATCH WITH HIRED OFFERS
 
     //[offer1,          offer2,       offer3]
     //    |                |            |
     //[ClientneedId1,ClientneedId1,ClientneedId1]
 
-    //         const myOff ¡ await ProfessionalOffers.findAll({ where: { clientNeedId } })
+    //         const myOff = await ProfessionalOffers.findAll({ where: { clientNeedId } })
     //          myOff.map(e => {
-    //             if (e.if !== idAceptado) {
+    //             if (e.id !== idAceptado) {
     //                 //filter de myoff
     //             }
     //         })
 
-    const dataOffer = transaction.data.filter((el) => el.type === "offer");
-
     if (dataOffer[0]) {
-      const updateOffer = dataOffer.map((el, index) => {
-        return {
-          status: "hired",
-          id: el.ProfessionalOfferId,
-        };
-      });
-      await ProfessionalOffer.bulkCreate(updateOffer, {
-        updateOnDuplicate: ["status"],
-      });
-    }
+      try {
+        clientNeedIds = dataOffer.map((el) => {
+          return el.ClientNeedId;
+        });
 
-    // CHANGE STATUS TO REST OF OFFERS THAT NOT MATCH WITH HIRED OFFERS
+        console.log("CLIENT NEED IDS: ", clientNeedIds);
+
+        const offers = await Promise.all(
+          clientNeedIds.map((el) => {
+            return ProfessionalOffer.findAll({
+              where: {
+                ClientNeedId: el,
+              },
+            });
+          })
+        );
+
+        console.log("OFFERS: ", offers);
+
+        await Promise.all(
+          offers.map((el) => {
+            const offersByNeedId = el.map((individualOffers) => {
+              if (
+                individualOffers.status === "in offer" ||
+                !individualOffers.status
+              ) {
+                return {
+                  id: individualOffers.id,
+                  status: "rejected",
+                };
+              }
+            });
+            return ProfessionalOffer.bulkCreate(offersByNeedId, {
+              updateOnDuplicate: ["status"],
+            });
+          })
+        );
+
+        // offers.map(el => {
+        //     return el.map(async (individualOffers) => {
+        //         console.log(individualOffers.status)
+        //         if (individualOffers.status === "in offer" || !(individualOffers.status)) {
+        //             individualOffers.status = "rejected"
+        //             return await individualOffers.save()
+        //         }
+        //     })
+        // })
+      } catch (error) {
+        res
+          .status(400)
+          .send(
+            'Errors on "CHANGE STATUS TO REJECTED TO REST OF OFFERS THAT NOT MATCH WITH HIRED OFFERS" ',
+            error.message
+          );
+      }
+    }
 
     // SEND EMAIL TO USER TO INFORM ABOUT SUCCES APPROVED TRANSACTION
 
-    res.redirect("https://serv-io.surge.sh");
+    res.redirect("http://localhost:3000/");
   },
 };
