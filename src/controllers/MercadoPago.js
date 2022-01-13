@@ -1,5 +1,5 @@
 const mercadopago = require("mercadopago");
-
+const { FRONT_URL } = process.env;
 const { ACCESS_TOKEN_MERCADO_PAGO } = process.env;
 mercadopago.configure({
   access_token: ACCESS_TOKEN_MERCADO_PAGO,

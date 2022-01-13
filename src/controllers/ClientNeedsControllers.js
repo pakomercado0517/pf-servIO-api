@@ -1,6 +1,7 @@
 const Sequelize = require("sequelize");
 const { User, ProfessionalOffer, ClientNeed } = require("../db.js");
 const { Op } = require("sequelize");
+const { FRONT_URL } = process.env;
 
 module.exports = {
   getAllNeeds: async (req, res) => {
@@ -99,11 +100,11 @@ module.exports = {
     try {
       if (userId) {
         const newNeed = await ClientNeed.create({
-          name : name ? name : '',
-          description: description ? description : '',
+          name: name ? name : "",
+          description: description ? description : "",
           status: "in offer",
           // location: location ? location : '',
-          photo: photo ? photo : '',
+          photo: photo ? photo : "",
           //   price,
           //   duration,
           //   guarantee_time,
@@ -140,33 +141,31 @@ module.exports = {
         },
       });
       res.status(200).send(need);
-    }
-    else {
+    } else {
       res.status(400).send("Please insert an id");
     }
   },
-  
+
   deleteNeedById: async (req, res) => {
     const id = req.params.id;
-    if(id){
+    if (id) {
       const need = await ClientNeed.findOne({ where: { id } });
-      if (need){
+      if (need) {
         need.destroy();
-        res.status(200).send( "La necesidad especifica ha sido eliminada.");
+        res.status(200).send("La necesidad especifica ha sido eliminada.");
       } else {
-        res.status(404).send("Need not found")
+        res.status(404).send("Need not found");
       }
-    }else{
-      res.status(200).send( "Por favor inserta un id.");
+    } else {
+      res.status(200).send("Por favor inserta un id.");
     }
   },
 
-  confirm : async (req, res) => {
-    console.log(req.params.token)
-    console.log (need.status)
+  confirm: async (req, res) => {
+    console.log(req.params.token);
+    console.log(need.status);
 
     const need = await ClientNeed.findOne({
-      
       where: {
         token: req.params.token,
         expiracion: {
@@ -175,19 +174,18 @@ module.exports = {
       },
     });
     if (!need) {
-      // req.flash("error", "No valido"),  
+      // req.flash("error", "No valido"),
       res.send("INVALIDO");
-    }else{
+    } else {
       need.token = null;
       need.expiracion = null;
-      need.status = 'done'
-    //guardar nuevo password
+      need.status = "done";
+      //guardar nuevo password
       await need.save();
-      res.send({message: 'needConfirmed', need});
+      res.send({ message: "needConfirmed", need });
     }
-
   },
-  
+
   validarToken: async (req, res) => {
     const need = await ClientNeed.findOne({
       where: {
@@ -196,7 +194,7 @@ module.exports = {
     });
     if (!need) {
       res.send(false);
-    }else{
+    } else {
       res.send(true);
     }
   },

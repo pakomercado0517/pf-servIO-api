@@ -8,6 +8,7 @@ const {
 } = require("../db.js");
 const enviarEmail = require("../handlers/email");
 const crypto = require("crypto");
+const { FRONT_URL } = process.env;
 module.exports = {
   getAllTransactions: async (req, res) => {
     try {
