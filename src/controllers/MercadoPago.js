@@ -179,6 +179,6 @@ module.exports = {
 
     // SEND EMAIL TO USER TO INFORM ABOUT SUCCES APPROVED TRANSACTION
 
-    res.redirect("http://localhost:3000/");
+    res.redirect(`${FRONT_URL}`);
   },
 };
