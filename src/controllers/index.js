@@ -321,6 +321,7 @@ module.exports = {
             ],
           },
         ],
+        order: [["id", "DESC"]],
       });
       const rate = professionals.map((r) => {
         if (r.Professional.ClientReviews !== []) {
