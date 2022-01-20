@@ -7,7 +7,7 @@ module.exports = (sequelize) => {
       user_name: {
         type: DataTypes.STRING,
         // allowNull: false,
-        unique: true,
+        unique: false,
       },
       first_name: {
         type: DataTypes.STRING,
@@ -62,7 +62,7 @@ module.exports = (sequelize) => {
         // allowNull: false
       },
       token: DataTypes.STRING,
-      expiracion: DataTypes.DATE 
+      expiracion: DataTypes.DATE,
     },
     {
       // tableName: 'users',
